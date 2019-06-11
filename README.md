@@ -47,9 +47,9 @@ https://app.pluralsight.com/library/courses/testing-react-applications-jest/tabl
 
 ![How regression works](readme_files/how_regression_works.png)
 
-### How testing stop regression
+### How testing stops regression
 
-![How testing stop regression](readme_files/how_testing_stop_regresion.png)
+![How testing stops regression](readme_files/how_testing_stop_regresion.png)
 
 ## Different kinds of tests
 
@@ -95,3 +95,50 @@ https://app.pluralsight.com/library/courses/testing-react-applications-jest/tabl
 ### Coverage tests
 
 ![Coverage tests](readme_files/coverage_tests.png)
+
+## Introduction to Jest
+
+### What is Jest?
+
+- A library installed via npm or yarn and run via the command line
+- Similar to popular test-runners but with handy extra features
+- A tool made by a team incluing members of the React team
+
+### More about Jest
+
+- Built on the top of Jasmine/Mocha (Jasmine and Mocha doesn't have mock and snapshot. Jest has.)
+- Adds snapshot testing, mocking and many other useful features
+- Includes superior assertion library, CLI
+- Works with or without React
+
+## Enzyme
+
+- Not a test runner like Jest, but provides tools to test React app specifically
+- Expresses component output as HTML (Like React test renderer)
+- Potentially useful but not for every project
+
+## Jest vs. Mocha
+
+![Jest vs. Mocha](readme_files/jest_vs_mocha.png)
+
+## Jest and Jest CLI
+
+> **Jest**
+
+The actual test-runner library which you use to execute your tests
+
+> **Jest CLI**
+
+A tool that you use from the command line to run and provide configuration options to Jest (the test runner)
+
+## Jest and React | What's the connection?
+
+![Jest and React](readme_files/jest_and_react.png)
+
+## Different Jest Skillset
+
+![Jest Skillset](readme_files/jest_skillset.png)
+
+## Common Jest Pitfalls
+
+![Jest Pitfall](readme_files/jest_pitfall.png) 
