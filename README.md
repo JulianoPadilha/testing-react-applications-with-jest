@@ -96,7 +96,7 @@ https://app.pluralsight.com/library/courses/testing-react-applications-jest/tabl
 
 ![Coverage tests](readme_files/coverage_tests.png)
 
-## Introduction to Jest
+# Introduction to Jest
 
 ### What is Jest?
 
@@ -141,4 +141,84 @@ A tool that you use from the command line to run and provide configuration optio
 
 ## Common Jest Pitfalls
 
-![Jest Pitfall](readme_files/jest_pitfall.png) 
+![Jest Pitfall](readme_files/jest_pitfall.png)
+
+# Fundamentals of Jest Testing
+
+## Jest installation
+
+- Installed via NPM like many other libraries
+- Local installation should determine version, but in practice CLI may call local or global  installation
+- CI installs Jest and CLI automatically, usually based on package.json
+
+```bash
+npm install -g jest-cli
+```
+
+```bash
+npm install jest --save
+```
+
+## Running tests
+
+- Tests are run by using the Jest CLI (typing "jest" followed by arguments in the command line)
+- The correct configuration for various different test patterns are stored as NPM scripts
+- In pratice, tests are "run" by CI software and "watched" by everything else
+
+> package.json
+
+```bash
+"scripts": {
+  "test": "jest"
+}
+```
+
+```bash
+npm run test
+```
+
+## Creating test files
+
+### How are test files identified?
+
+- Any files inside a folder named __tests__ are considered tests
+
+```bash
+__tests__/*js
+```
+
+- Any file with .spec or .test in their filename are considered tests
+
+```bash
+*.spec.js
+*.test.js
+```
+
+## Jest Globals
+
+> it (test)
+
+Method which you pass a function to, that function is executed as block of tests by the test runner
+
+> describe (suite)
+
+An optional method for grouping any number of _it_ or _test_ statements
+
+```bash
+describe('Describes what we are testing', () => {
+  it('The thing that we are specifically testing', () => {
+
+  });
+});
+```
+
+### Watching for changes
+
+```bash
+jest --watch
+```
+
+- In "watch mode" tests are run automatically as files changes
+- Only tests pertaining to changed files are run
+- Jest detects changes automatically
+- Actively prevents regression
