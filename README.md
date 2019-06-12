@@ -222,3 +222,17 @@ jest --watch
 - Only tests pertaining to changed files are run
 - Jest detects changes automatically
 - Actively prevents regression
+
+## beforeEach and beforeAll
+
+- beforeEach runs a blockc of code before each test
+- Useful for setting up databases, mock instances, etc
+- beforeAll runs code just onde, before the first test
+
+## afterEach and afterAll
+
+- Inverse versions of beforeEach and beforeAll
+- Runs a block of code after each test (or after the last test)
+- Useful for closing open connections, terminating sub-process
+
+
