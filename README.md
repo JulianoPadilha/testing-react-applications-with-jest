@@ -235,4 +235,54 @@ jest --watch
 - Runs a block of code after each test (or after the last test)
 - Useful for closing open connections, terminating sub-process
 
+## Skipping and Isolating Tests
 
+- Skipping a test results in that test not being run
+- Isolating a test result in only it (an any other isolated tests) running
+
+```js
+it.skip('', () => {});
+```
+
+```js
+it.only('', () => {});
+```
+
+## Asynchronous Testing
+
+### What are asynchronous tests?
+
+- Contains assertions (like a regular test)
+- Does not complete instantaneously
+- Can take varying amounts of time, even an unknown amout of time
+- Jest must be notified that test is complete
+
+### Defining asynchronous tests
+
+- Invoke the ```done()``` callback that is passed to the test
+- Return a promise from a test
+- Pass an async function to ```describe```
+
+```js
+it('async test 1', done => {
+  setTimeout(done, 100);
+});
+```
+
+```js
+it('async test 2', () => {
+  return new Promise(resolve => {
+    setTimeout(resolve, 100)
+  });
+});
+```
+
+```js
+it('async test 3', async () => {
+  await delay(100);
+});
+```
+
+> The ways of formatting an async test shown gere are roughly equivalent
+
+> Delay is a method that returns a promise
