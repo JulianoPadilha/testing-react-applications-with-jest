@@ -286,3 +286,41 @@ it('async test 3', async () => {
 > The ways of formatting an async test shown gere are roughly equivalent
 
 > Delay is a method that returns a promise
+
+# Understanding Jest mocks
+
+## Why mocking?
+
+- Reduce dependencies required by tests (faster execution)
+- Prevent side-effects during testing
+-Build custom mocks to facilitate desired testing procedures
+
+## What is a mock?
+
+![Example of mocking](readme_files/mock_example.png)
+
+- A convincing duplicate of an object with no internal workings
+- Can be automatically or manually created
+- Has same API as original, but no side-effetcs
+- Spies and other mock features simplify testing
+
+## The mocking process
+
+- Scan the original object for methods, give the new object spy methods with the same names
+- Ensure that any methods which returned a promise still return a promise in the mock
+- Create mock for any complex values that are returned from methods which are required for tests
+
+## Mock functions
+
+- Also known as "spies"
+- No side-effects
+- Counts functions calls
+- Records arguments passed when called
+- Can be "loaded" with return values
+- Return value must approximate original
+
+## Creating mock files
+
+- Appropriately named NPM mocks are loaded automatically
+- Mocks must reside in a ```__mocks__``` folder next to mocked module
+- NPM modules and local modules can both be mocked
