@@ -382,3 +382,69 @@ export default isomorphicFetch;
 - Methods returning a specific and complex value often can't be mocked automatically
 - Methods that are not part of your module at compile-time won't be mocked
 - Modules that you did not expect to be mocked may be mocked
+
+# Snapshot Testing
+
+ ## What is a Snapshot?
+
+ - JSON-based record of a component's output
+ - Compared to component's actual output during testing process
+ - Committed along with other modules and tests to the application repo
+
+ ## How Snapshots testing works
+
+```js
+import renderer from 'react-test-renderer';
+import { MyComponent } from './MyComponent';
+
+const tree = renderer.create(<MyComponent title='The meaning of life' />);
+
+expect(tree.toJSON()).toMatchSnapshot();
+```
+
+First, HTML output is generated with React.
+> Note: ```react-test-renderer``` is used instead of ```react-dom```, ```enzyme``` is not used
+
+The first time ```toMatchSnapshot()``` is called, a snapshot is created.
+Each subsequent time, the new snapshot is compared with the old one.
+
+## The Snapshot testing process
+
+![Snapshot process](readme_files/snapshot_process.png)
+
+## Snapshot - Demo
+
+> TagsList.spec.js
+
+```js
+import React from 'react';
+import TagsList from './TagsList'; 
+import renderer from 'react-test-renderer';
+
+describe('The Tags List', () => {
+  it('should render a snapshot', () => {
+    const tree = renderer.create(<TagsList tags={['css', 'html', 'js']} />);
+
+    expect(tree.toJSON()).toMatchSnapshot();
+  });
+});
+```
+
+## Advantages and Disadvantagens
+
+### Advantages
+
+- Fast and automatic
+- Catches regressions humans may miss
+- Works nicely with libraries that take in state and output HTML components (React, Angular, Vue)
+- Adds some protection against regression when no time is available for manually writing tests
+- Requires little training or knowledge of testing to use
+
+### Advantages
+
+- Easy to ignore and suppress
+- Protects only against regression
+- If a component is working incorrectly and then is fixed, a snapshot test will say it is now broken
+- Add extra files to an already crowded repo
+- Sensitive to incidental changes
+- A waste of resources, if a component is certain to be modified in near future
