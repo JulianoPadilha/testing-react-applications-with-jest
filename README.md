@@ -324,3 +324,61 @@ it('async test 3', async () => {
 - Appropriately named NPM mocks are loaded automatically
 - Mocks must reside in a ```__mocks__``` folder next to mocked module
 - NPM modules and local modules can both be mocked
+
+## Mocking - Demo
+
+> fetch-question-saga.spec.js
+
+```js
+import { handleFetchQuestion } from './fetch-question-saga';
+import fetch from 'isomorphic-fetch';
+
+describe('Fetch question saga', () => {
+  beforeAll(() => {
+    fetch.__setValue([{ question_id: 42 }]);
+  });
+
+  it('should fetch the question', async () => {
+    const gen = handleFetchQuestion({ question_id: 42 });
+    const { value } = await gen.next(); 
+    expect(value).toEqual([{ question_id: 42 }]);
+    expect(fetch).toHaveBeenCalledWith(`/api/questions/42`);
+  });
+});
+```
+
+> __mocks __/isomorphic-fetch.js
+
+```js
+let __value = 42;
+const isomorphicFetch = jest.fn(() => __value);
+isomorphicFetch.__setValue = v => __value = v;
+
+export default isomorphicFetch;
+```
+
+## Automatic / Manual Mocking
+
+- In some setups, any require statements will have mocks generated automatically
+- If a manual mock file exists, it will be used as the mock instead of the automatic version
+- Most apps require some combination of manual and automatic mocking
+
+### Manual Mocks
+
+- Exists as a separate file alongside the file being mocked
+- Manual mocks will be used automatically for NPM modules
+- Manual mocks are more work than automatic mocks
+- Needs to be updated when mocked file changes
+
+### Automatic Mocking
+
+- Most modules can be automatically replaced with mocks
+- Mocks are usually generated correctly, but sometimes not
+- Greatly reduced likelihood of side-effects during tests
+- Developer must use discretion
+
+### Automatic Mocking Challenges
+
+- Methods returning a specific and complex value often can't be mocked automatically
+- Methods that are not part of your module at compile-time won't be mocked
+- Modules that you did not expect to be mocked may be mocked
