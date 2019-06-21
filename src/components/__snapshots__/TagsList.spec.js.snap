@@ -9,7 +9,7 @@ exports[`The Tags List should render a snapshot 1`] = `
     html
   </code>
   <code>
-    js
+    swift
   </code>
 </div>
 `;

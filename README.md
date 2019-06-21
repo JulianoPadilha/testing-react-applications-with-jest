@@ -448,3 +448,11 @@ describe('The Tags List', () => {
 - Add extra files to an already crowded repo
 - Sensitive to incidental changes
 - A waste of resources, if a component is certain to be modified in near future
+
+## Updating Snapshots
+
+- Tests must be run with ```--update```flag
+- Old snapshots will be replaced with image of current output
+- Using ```--update``` without careful consideration diminishes the value of snapshots
+
+## Update Snapshots - Demo
