@@ -456,3 +456,174 @@ describe('The Tags List', () => {
 - Using ```--update``` without careful consideration diminishes the value of snapshots
 
 ## Update Snapshots - Demo
+
+```bash
+jest --update or jest -u
+```
+
+# Testing React Components
+ 
+ ## What does testing React Components mean?
+
+ - Verify output has not regressed
+ - Ensure that rarely occuring corner cases produce the correct output
+ - If component generates side effects, verify they occur but do not execute them
+ - Verify user interactions are handled as expected
+
+ ## Constructuring testable React Components
+
+ ### A spectrum of React Components
+
+ - Components may or may not have lifecycle handlers
+ - Components may or may not have internal state
+ - Components may or may not generate side effects
+ - Components may get state from arguments, or from external dependencies
+
+### Building testable React Components
+
+- No internal state - output is an idempotent product of the props that are provided
+- No side-effects - any AJAX calls, UI changes or other side effects are handled by sagas, thunks, etc., but not by components
+- No lifecycle hooks - fetching data is handled on the application leve, not the component level
+
+## React Redux and Jest: a fine pair
+
+- Components don't generate side effects
+- Component consists of logical display and container components
+- Components do not have internal state
+
+### Testing React Redux Components
+
+- Test Container and Display elements separately
+- Use unit tests to verify methods and properties passed by container are accurate
+- Use snapshots tests to verify the output of the display component, passing props in directly
+
+## React Redux Container Testing - Demo
+
+> src/__ tests __/QuestionDetail.js
+> src/components/QuestionDetail.jsx
+
+```js
+import { mapStateToProps } from '../QuestionDetail';
+
+describe('The Question Detail Component', () => {
+  describe('The Container Element', () => {
+    describe('mapStateToProps', () => {
+      it('should map the state to props correctly', () => {
+        const sampleQuestion = {
+          question_id: 42,
+          body: 'Space is big'
+        };
+        const appState = {
+          questions: [sampleQuestion]
+        };
+        const ownProps = {
+          question_id: 42
+        };
+        const componentState = mapStateToProps(appState, ownProps);
+        console.log(componentState);
+        expect(componentState).toEqual(sampleQuestion);
+      });
+    });
+  });
+});
+```
+
+## React Redux Display Testing - Demo
+
+> src/__ tests __/QuestionDetail.js
+
+Will generate a snapshot!!
+
+```js
+import { mapStateToProps, QuestionDetailDisplay } from '../QuestionDetail';
+import renderer from 'react-test-renderer';
+import React from 'react';
+
+describe('The Display element', () => {
+  it('should not regress', () => {
+      const tree = renderer.create(<QuestionDetailDisplay title='The meaning of life' body='42' answer_count={3} tags={['css', 'html', 'js']} />);
+
+      expect(tree.toJSON()).toMatchSnapshot();
+  });
+});
+```
+
+## Enzyme vs. React Test Renderer
+
+### React test renderer
+
+- Takes a React component and outputs the resulting HTML without a DOM
+- From the React team
+- Useful for getting the output HTML of a component for snapshot testing
+- Recommended by the Jest Team
+
+### Enzyme
+
+- Takes a React component and outputs the resulting HTML without a DOM
+- From an unrelated, but respected team (AirBnB)
+- Useful for testing a variety of interactions including click , keyboard input, and more
+- Has a variety of open bugs which make using it a challenge
+
+## Testing Stateful React Components
+
+- Mock dependencies, then test them 
+- Use spies to verify side-effects
+- Move logic from lifecycle to services
+- Prevent regression with snapshots
+- Inject values by writing mocks for services
+- Make stateless components, where possible
+
+## Building a Stateful React Component - Demo
+
+> src/components/NotificationsViewer.jsx
+> src/App.jsx
+
+```js
+import React from 'react';
+import NotificationsService from '../services/NotificationsService';
+
+export default class extends React.Component {
+  constructor(...args) {
+    super(...args);
+    this.state = {
+      count: -1
+    }
+  }
+
+  async componentDidMount() {
+    let { count } = await NotificationsService.GetNotifications();
+    this.setState({
+      count
+    });
+
+    console.log(count);
+    
+  }
+
+  render() {
+    return (
+      <section className='mt-3 mb-2'>
+        <div className='notifications'>
+          {this.state.count !== -1 ? `${this.state.count} Notifications Awaiting!` : 'Loading...' }
+        </div>
+      </section>
+    )
+  }
+}
+```
+
+> src/services/NotificationsService.js
+
+```js
+import { delay } from "redux-saga";
+
+export default {
+  async GetNotifications() {
+    console.warn('REAL NOTIFICATION SERVICE! REALLY CONTACTING API!');
+    await delay(1000);
+    return { count: 42 };
+  }
+}
+```
+
+## Testing a Stateful React Component - Demo
