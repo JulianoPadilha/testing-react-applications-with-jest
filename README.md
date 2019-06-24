@@ -627,3 +627,63 @@ export default {
 ```
 
 ## Testing a Stateful React Component - Demo
+
+## Advanced Jest Matchers
+
+### What is a Matcher?
+
+- Also knows as an assertion or expectation
+- Represents a claim that avalue be equal (or not) to something
+- Throws an error (test fails) if matcher's claim is not validated
+
+### Exploring Matchers
+
+> Not
+
+- Reverses an assertion
+- If assertion without not would pass, assertion with not will fail
+
+> To Be and To Equal
+
+- Verify that two values are equivalent
+- Two arrays with matching elements are equal, but not identical
+- Very general - use more specific matcher when possible
+
+> To Be Close To
+
+- Like toEqual for numbers, but assertion still passes if numbers are close but not equal
+- For assertions involving floating point numbers
+
+> To Contain & To Have Length
+
+- Array matchers which verify the contents and size of a collection
+- More succinct than combining ```toEqual``` with array operators ```includes```, ```length```, etc.
+
+### Jest Matchers - Demo
+
+> src/reducers/questions.spec.js
+
+```js
+import { questions } from './questions';
+
+describe('The questions reducer', () => {
+  it('should work', () => {
+    const state = ['foo', 'bar'];
+    const stateClone = ['foo', 'bar'];
+    const newState = questions(state, { type: 'UNRECOGNIZED_ACTION' })
+    
+    expect(newState).toEqual(stateClone);
+    expect(newState).toBe(state);
+  });
+
+  it('should add new questions', () => {
+    const state = [{question_id: 'foo'}, {question_id: 'bar'}];
+    const newQuestion = {question_id: 'baz'};
+    const newState = questions(state, {type: 'FETCHED_QUESTION', question: newQuestion});
+
+    expect(newState).toContain(newQuestion);
+    expect(state).not.toContain(newQuestion);
+    expect(newState).toHaveLength(3);
+  });
+});
+```
